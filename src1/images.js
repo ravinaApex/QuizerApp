@@ -1,0 +1,20 @@
+export default {
+  quizer_logo: require('./../assets/quizer_logo.png'),
+  profile_pic: require('./../assets/profile_pic.jpg'),
+  maths: require('./../assets/maths.png'),
+  history: require('./../assets/history.png'),
+  logo: require('./../assets/logo.png'),
+  movies: require('./../assets/movies.png'),
+  physics: require('./../assets/physics.png'),
+  politics: require('./../assets/politics.png'),
+  sports: require('./../assets/sports.png'),
+  technology: require('./../assets/technology.png'),
+  congrats: require('./../assets/congrats.jpg'),
+  medal: require('./../assets/medal123.png'),
+  img_award: require('./../assets/img_award.png'),
+  facebook_icon: require('./../assets/facebook-icon.png'),
+  invite_icon: require('./../assets/invite-icon.png'),
+  music_icon: require('./../assets/music-icon.png'),
+  star_icon: require('./../assets/star-icon.png'),
+
+}
