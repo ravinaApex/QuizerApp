@@ -92,3 +92,23 @@ export function quizData(category) {
     })
   }
 }
+
+export function historyData(tokenValue) {
+  return function (dispatch, getState) {
+    return new Promise(async (resolve, rejects) => {
+      let allData = [];
+
+      firebase.database().ref(`/UserHistory/${tokenValue}`).on('child_added', (snapshot) => {
+        allData.push({ key: snapshot.key, data: [snapshot.val()] });
+        if (snapshot.val()) {
+          dispatch({
+            type: 'history',
+            subtype: 'success',
+            historyData: allData,
+          });
+          resolve(allData)
+        }
+      });
+    })
+  }
+}

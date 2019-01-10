@@ -52,15 +52,13 @@ class Home extends Component {
   }
 
   componentWillMount(){
-      this.props.Actions.currentUserData().then(data => {
-        var arr = data.uname.split(' ');
-        this.setState({
-          name: arr[0],
-          surname: arr[1],
-        })
-      });
-
-
+    this.props.Actions.currentUserData().then(data => {
+      var arr = data.uname.split(' ');
+      this.setState({
+        name: arr[0],
+        surname: arr[1],
+      })
+    });
   }
 
   // componentWillReceiveProps(props){

@@ -13,6 +13,7 @@ const initialState = {
     rankedUserData: {},
     quizData: {},
     rankedUserDataList: {},
+    historyData: []
   }
 };
 

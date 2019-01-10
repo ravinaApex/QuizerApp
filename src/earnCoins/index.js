@@ -6,34 +6,41 @@ import colors from "../appConfig/colors";
 import { AntDesign } from '@expo/vector-icons';
 import images from './../images';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as currentUserAction from "../actions/currentUserAction";
 
-export default class EarnCoins extends Component {
+class EarnCoins extends Component {
+
+  componentWillMount(){
+    this.props.Actions.currentUserData();
+  }
 
 render(){
   return(
     <View style={{flex:1,backgroundColor:'#FCFAFA'}}>
-  <View style={styles.statusBar} />
-    <View  style={styles.container}>
-      <View style={styles.mainHeaderView}>
-        <View style={styles.headerView}>
-          <TouchableOpacity style={styles.arrowView} onPress={() => this.props.navigation.goBack()}>
-            <AntDesign name="arrowleft" size={20} color="rgb(72, 72, 72)"/>
-          </TouchableOpacity>
-        <View style={styles.headerTextView}>
-          <Text style={styles.headerText}>Earn coins</Text>
-        </View>
-          <View style={{flex:1}}>
-            <View style={styles.mainCoinView}>
-              <View>
-                <MaterialCommunityIcons name="coins" size={16} color="#FEA339"/>
+      <View style={styles.statusBar} />
+        <View  style={styles.container}>
+          <View style={styles.mainHeaderView}>
+            <View style={styles.headerView}>
+              <TouchableOpacity style={styles.arrowView} onPress={() => this.props.navigation.goBack()}>
+                <AntDesign name="arrowleft" size={20} color="rgb(72, 72, 72)"/>
+              </TouchableOpacity>
+            <View style={styles.headerTextView}>
+              <Text style={styles.headerText}>Earn coins</Text>
             </View>
-              <View>
-                <Text style={styles.text120657}> 1,20,657</Text>
+              <View style={{flex:1}}>
+                <View style={styles.mainCoinView}>
+                  <View>
+                    <MaterialCommunityIcons name="coins" size={16} color="#FEA339"/>
+                  </View>
+                  <View>
+                    <Text style={styles.text120657}> {this.props.currentUserData.coin}</Text>
+                  </View>
+              </View>
             </View>
           </View>
-        </View>
       </View>
-  </View>
 
     <View style={styles.mainView}>
       <View style={styles.firstMainView}>
@@ -106,3 +113,15 @@ render(){
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    currentUserData: state.quiz.currentUserData,
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    Actions: bindActionCreators(currentUserAction, dispatch),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(EarnCoins);

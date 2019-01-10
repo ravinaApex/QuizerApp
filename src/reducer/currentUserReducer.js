@@ -39,6 +39,15 @@ export default function quiz(state = initialState, action = {}) {
         quizData: action.subtype === "success" ? action.quizData : state.quizData,
       };
 
+      case 'history':
+        return {
+          ...state,
+          historyDataError: action.error ? action.error : null,
+          historyDataSuccess: action.subtype === 'success',
+          historyDataLoading: action.subtype === 'loading',
+          historyData: action.subtype === "success" ? action.historyData : state.historyData,
+        };
+
     default:
       return state;
   }

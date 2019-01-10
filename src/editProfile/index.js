@@ -1,20 +1,22 @@
 import React, {Component} from "react";
-import { View, Text, Image, Dimensions, ImageBackground, TextInput, TouchableOpacity, AsyncStorage } from "react-native";
+import { View, Text, Image, Dimensions, ScrollView, ImageBackground, TextInput, TouchableOpacity, AsyncStorage } from "react-native";
 import images from './../images';
 import styles from "./style";
 import colors from "../appConfig/colors";
 import { LinearGradient } from 'expo';
 import { AntDesign, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import LineChart from "react-native-responsive-linechart";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import _ from 'lodash';
 
 const Height = Dimensions.get("window").height;
 const Width = Dimensions.get("window").width;
-
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as currentUserAction from "../actions/currentUserAction";
 import moment from 'moment';
+var rankArray = [], weekDate = [], temp = [], coinArray, tempData = {};
 
 const data = [10, 20, 18, 40, 38, 60, 70];
 const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -23,6 +25,9 @@ const config = {
     line: { visible: false},
     yAxis: { visible: false },
     grid: { visible: false },
+    // yAxis: {
+    //   visible: true,
+    // },
     xAxis: { visible: true },
     area: {
       gradientFrom: 'rgb(90, 195, 15)',
@@ -34,8 +39,7 @@ const config = {
   insetY: 10
 };
 
-// var test = moment().day("Monday").week(52)
-// console.log(test);
+
 
 class EditProfile extends Component {
 
@@ -50,7 +54,8 @@ class EditProfile extends Component {
     }
   }
 
-  componentWillMount() {
+  componentWillMount = () => {
+
     this.props.Actions.currentUserData().then(data => {
       var arr = data.uname.split(' ');
       this.setState({
@@ -60,18 +65,89 @@ class EditProfile extends Component {
     });
 
     var weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    var weekDate = [];
+    weekDate = [], temp = [], tempData = {};
+    rankArray = [];
 
     var weeknumber = moment(new Date(), "DD-MM-YYYY").week();
-    console.log(weeknumber);
 
     weekDays.map((obj) => {
       var test = moment().day(obj).week(weeknumber - 1);
       weekDate.push(moment(test).format('DD-MM-YYYY'));
     })
-    console.log('weekDate: ',weekDate);
-    
+
+    AsyncStorage.getItem("id_token").then((tokenValue) => {
+      this.props.Actions.historyData(tokenValue);
+    });
+
+    var test = false;
+    var rank, coin, arr;
+    weekDate.map((date) => {
+      this.props.historyData.map((obj) => {
+        if(date === obj.key){
+          test = true;
+        }
+      });
+      if(test === true)
+      {
+        this.props.historyData.map((obj) => {
+          if(obj.key === date)
+          {
+            obj.data.map((inData) => {
+              if(inData.length !== 1)
+              {
+                arr = Object.keys(inData).map(function(k) { return inData[k] });
+                arr.map((obj) => {
+                  rank = obj.ranking;
+                });
+                rankArray.push(rank);
+              }
+              else {
+                inData.map((obj) => {
+                  rankArray.push(obj.ranking);
+                })
+              }
+            })
+          }
+        })
+      }
+      else {
+        rankArray.push(0);
+      }
+    });
+    console.log('rankArray: ',rankArray);
+
+    this.props.historyData.map((outData) => {
+      outData.data.map((inData) => {
+        if(inData.length !== 1)
+        {
+          arr = Object.keys(inData).map(function(k) { return inData[k] });
+          arr.map((obj) => {
+            coin = obj.totalCoin;
+          });
+          tempData = {
+            date: outData.key,
+            coin: coin
+          }
+          temp.push(tempData);
+        }
+        else {
+          inData.map((obj) => {
+            tempData = {
+              date: outData.key,
+              coin: obj.totalCoin
+            }
+            temp.push(tempData);
+          })
+        }
+      });
+    });
+
+
+    coinArray = temp.sort((a, b) => (b.coin - a.coin));
+    console.log('coinArray: ',coinArray);
+
   }
+
 
   tab1 = () => {
     this.setState({
@@ -100,7 +176,23 @@ class EditProfile extends Component {
 
   render(){
 
-    // this.state.let { tab1, tab2, tab3 } = this.state;
+    var arrData = coinArray.map((obj, i) => {
+
+      return(
+        <View key={i} style={styles.listView}>
+          <View style={styles.listUnameView}>
+            <Text style={styles.listUname}>{i+1}</Text>
+          </View>
+          <View style={styles.dateView}>
+            <Text style={styles.listUname}>{obj.date}</Text>
+          </View>
+          <View style={styles.listCoinView}>
+            <MaterialCommunityIcons name="coins" size={14} color='rgb(255, 164, 0)' style={{ marginTop: 3 }}/>
+            <Text style={styles.listValueText}> {obj.coin}</Text>
+          </View>
+        </View>
+      )
+    });
 
     return(
       <View style={styles.container}>
@@ -202,7 +294,7 @@ class EditProfile extends Component {
                   <Text style={styles.progressText}>Progress Graph</Text>
                 </View>
                 <View style={styles.chartView}>
-                  <LineChart style={{ flex:1 }} config={config} data={data} xLabels={labels}/>
+                  <LineChart style={{ flex:1 }} config={config} data={rankArray} xLabels={labels}/>
                 </View>
               </View>
               : null
@@ -210,7 +302,9 @@ class EditProfile extends Component {
 
             {this.state.tab3 === 'true'
               ? <View style={styles.tab1View}>
-                  <Text style={styles.tab1Text}>Tab 3</Text>
+                  <ScrollView>
+                    {arrData}
+                  </ScrollView>
                 </View>
               : null
             }
@@ -225,6 +319,7 @@ class EditProfile extends Component {
 function mapStateToProps(state) {
   return {
     currentUserData: state.quiz.currentUserData,
+    historyData: state.quiz.historyData,
   }
 }
 function mapDispatchToProps(dispatch) {

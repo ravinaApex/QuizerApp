@@ -176,4 +176,61 @@ export default {
     marginBottom: 10,
   },
 
+  listView: {
+    height: 65,
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderBottomColor: 'gray'
+  },
+
+  listUnameView: {
+    width: Width/8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  dateView: {
+    width: Width/2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  listImage: {
+    height: 45,
+    width: 45,
+    borderRadius: 22,
+  },
+
+  listUname: {
+    fontSize: 13,
+    fontFamily: 'lato-bold',
+  },
+
+  listEmail: {
+    marginLeft: 15,
+    fontSize: 11,
+    color:'rgb(172, 172, 172)',
+    fontFamily: 'lato-bold',
+    marginTop: 3,
+  },
+
+  listCoinView: {
+    width: Width/2.8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  listValueText: {
+    fontSize: 13,
+    fontFamily: 'lato-bold',
+    marginTop: 2,
+  },
+
+  listHashView: {
+    flex: 2,
+    alignItems: 'flex-end',
+  },
+
+
 }
