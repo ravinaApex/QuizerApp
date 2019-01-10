@@ -29,7 +29,6 @@ export default {
      width: 50,
      justifyContent:'center',
      alignItems:'center',
-     // backgroundColor: 'red'
    },
    headerTextView: {
      flex: 1,
@@ -44,6 +43,7 @@ export default {
      fontFamily:'lato-bold'
    },
   mainQuestionView:{
+    flex:1.5,
     backgroundColor:'#FFFFFF',
     borderRadius:15,
    borderStyle: 'dotted',
@@ -51,7 +51,7 @@ export default {
     borderBottomWidth:1,
   },
   mainView:{
-    flex:3,
+    flex: 1,
      flexDirection : 'row',
   },
   viewQue:{
@@ -73,6 +73,12 @@ export default {
     flex:1,
     justifyContent:'center',
     alignItems:'center'
+  },
+  circle:{
+    width: 10,
+    height: 10,
+    borderRadius: 100/2,
+    backgroundColor: 'red'
   },
   mainViewCoin:{
     flex:1,
@@ -98,23 +104,14 @@ export default {
      flex: 1
   },
   leftTopRadius:{
-    backgroundColor:'rgb(248, 248, 248)',
-    width: 20,
-    height: 20,
      borderRadius: 10,
-     left: -10, top:-10
   },
   mainViewRightRadius:{
   flex: 1,
    alignItems:'flex-end'
   },
   viewRightRadius:{
-    backgroundColor:'rgb(248, 248, 248)',
-    width: 20,
-    height: 20,
     borderRadius: 10,
-    right: -10,
-    top: -10
   },
   mainViewBottomRadius:{
     flexDirection:'row',
@@ -125,12 +122,7 @@ export default {
      justifyContent:'flex-end'
   },
   bottomLeftRadiusView:{
-    backgroundColor:'rgb(248, 248, 248)',
-    width: 20,
-    height: 20,
     borderRadius: 10,
-    left: -10,
-    bottom: -10
   },
   subbottomRightRadiusView:{
     flex: 1,
@@ -138,12 +130,7 @@ export default {
     alignItems:'flex-end'
   },
   bottomRightRadiusView:{
-    backgroundColor:'rgb(248, 248, 248)',
-    width: 20,
-    height: 20,
     borderRadius: 10,
-    right: -10,
-    bottom: -10
   },
   mainViewQuestion:{
      flex:1,
@@ -151,28 +138,26 @@ export default {
   },
   subViewQuestion:{
      flex: 1,
-     marginTop:10,
      justifyContent: 'flex-end',
      bottom:35,
   },
   question6Text:{
     fontSize: 12,
-    marginBottom:5,
     color:'#A6A6A6',
     fontFamily:'lato-regular'
   },
   questionText:{
-     fontSize: 14,
-      marginTop: 5,
+     fontSize: 16,
+     marginTop: 35,
       fontFamily:'lato-bold'
   },
   mainViewList:{
-    flex:1,
-    backgroundColor:'#FCFAFA',
+    flex:1.5,
+   backgroundColor:'#FCFAFA',
     paddingHorizontal: 20,
   },
   firstOptionView:{
-    height: Height/10,
+    height: Height/8,
     alignItems:'center',
     // justifyContent:'center',
     marginBottom:2,

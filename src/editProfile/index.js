@@ -51,8 +51,50 @@ class EditProfile extends Component {
       tab1: 'false',
       tab2: 'true',
       tab3: 'false',
+      image: null,
+      img: null,
     }
   }
+
+  pickImage = async () => {
+    console.log("innnnnnnnnnn");
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      aspect: [4, 3],
+    });
+
+    try {
+      if (!result.cancelled) {
+        console.log("result innnnnnn iffffff");
+        this.setState({ image: result.uri, isProfileImage: true });
+        var arr = result.uri.split('/');
+        var imgName = arr[arr.length - 1];
+        uploadUrl = this.uploadImageAsync(result.uri, imgName);
+        console.log("uploadUrl::",uploadUrl);
+        this.setState({ img: result.uri });
+      }
+    } catch (e) {
+      console.log("elseeeeeeeeeeeee")
+      console.log(e);
+      alert('Upload failed, sorry :(');
+    }
+  };
+
+
+  uploadImageAsync = async (uri, imgName) => {
+    console.log("function");
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const ref = firebase.storage().ref().child("images/" + imgName);
+
+    const snapshot = await ref.put(blob);
+    ref.getDownloadURL().then((url) => {
+      this.setState({ image: url });
+    });
+    console.log("this.state.image",this.state.image);
+    return snapshot;
+  }
+    
 
   componentWillMount = () => {
 
@@ -175,7 +217,7 @@ class EditProfile extends Component {
 
 
   render(){
-
+    let { image, img } = this.state;
     var arrData = coinArray.map((obj, i) => {
 
       return(
@@ -207,9 +249,18 @@ class EditProfile extends Component {
         </View>
         <View style={{flex: 1}}>
         <View style={{ flex: 0.9, }}>
-          <View style={styles.profileImgView}>
-            <Image source={{ uri: this.props.currentUserData.profile }} style={styles.profileImg} />
-          </View>
+
+
+
+        <View style={styles.profileImgView}>
+         <Image source={{ uri: this.props.currentUserData.profile }} style={styles.profileImg} />
+         <TouchableOpacity onPress={this.pickImage} style={{height: 45,width: 45, borderRadius: 27,position: 'absolute',elevation: 20,bottom:10}}> 
+         <Image source={{uri: image}} style={{height: 55,width: 55,borderRadius: 27,  position: 'absolute',}} />
+        </TouchableOpacity>
+      </View>
+
+
+
           <View style={styles.uNameView}>
             <Text style={styles.uNameText}>{this.props.currentUserData.uname}</Text>
             <Text style={styles.uNameEmail}>@samantha_smith</Text>

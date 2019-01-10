@@ -37,6 +37,20 @@ class Option extends Component {
 
   componentWillMount = async () => {
     // console.log("will");
+
+    var { values, index } = this.props;
+    console.log("render values    test demo::",values.option);
+    var urlopt = values.option.split('//');
+    console.log("urlopt",urlopt);
+    var split = urlopt[0];
+    var split1 =urlopt[1];
+    // console.log("componentwillmount:::::::::::: split::",split);
+    this.setState({
+      splitopt:split,
+    });
+    console.log("setState splitopt will ::::",this.state.splitopt);
+
+
     this.setState({
       correctoption: arrnew[qno].correctoption,
     });
@@ -148,13 +162,25 @@ class Option extends Component {
 
   render() {
 
-    const { values, index } = this.props;
+    var { values, index } = this.props;
+    var urlopt = values.option.split('//');
+    //console.log("urlopt",urlopt);
+    var split = urlopt[0];
+
+    console.log("split in render 18",split);
 
     return (
       <TouchableWithoutFeedback onPress={() => this.checkAnswer(values.option)}>
         <View style={[styles.firstOptionView, this.state.borderStyle,  { flexDirection: 'row', backgroundColor: this.state.color}]}>
           <View style={{ flex: 9, alignItems: 'center', }}>
-            <Text style={[styles.firstOptionText, {marginLeft: deviceWidth / 10,}]}>{values.option}</Text>
+            {/* <Text style={[styles.firstOptionText, {marginLeft: deviceWidth / 10,}]}>{values.option}</Text> */}
+            
+            {
+              split !== "http:" && split !== "https:"
+               ? <Text style={styles.firstOptionText}>{values.option}</Text>
+               : <Image source={{ uri: values.option }} style={{width: 50, height: 50}}/>
+             }
+
           </View>
           <View style={{ flex: 1, }}>
             {/*<Image source={this.state.imageResult} style={{width: 20, height: 20 }} />*/}
@@ -343,6 +369,10 @@ class ImgRandomQuiz extends Component {
       loader: false,
       progressColor: 'green',
       quizModal: false,
+      splitque:'',
+      splitopt:'',
+      splitimg:'',
+      imgemoji :'images.thinking',
     }
 
     this.animatedValue = new Animated.Value(0);
@@ -385,6 +415,37 @@ class ImgRandomQuiz extends Component {
         options : arrnew[qno].options,
         correctoption : arrnew[qno].correctoption,
       });
+
+      var temp = this.state.options.map((obj) => {
+        //console.log("obj:  ",obj.option);
+
+        var urlopt = obj.option.split('//');
+        //console.log("componentWillMount urlopt::::::999",urlopt);
+        var split = urlopt[0];
+        var split1 =urlopt[1];
+        var margeurl = `${split}//${split1}`
+        console.log("componentwillmount:::::::::::: split::",split);
+        this.setState({
+          splitopt:split,
+          splitimg:split1,
+
+        });
+        console.log("splitopt componentWillMount  stste::::::::",this.state.splitopt);
+      })
+
+
+      console.log("this.stste.question999999999",this.state.question);
+      var urlquestion = this.state.question;
+      var urlque =  this.state.question.split('//');
+      var split = urlque[0];
+      var split1 =urlque[1];
+      this.setState({
+        splitque:split
+      });
+      console.log("splitque::",this.state.splitque);
+        console.log("// QUESTION:",urlquestion);
+      console.log("split:",split);
+      console.log("split1:", split1);
     });
 
 
@@ -421,13 +482,22 @@ class ImgRandomQuiz extends Component {
          })
          if(this.state.count < 15 && this.state.count > 5)
          {
-           this.setState({ progressColor: 'blue' });
+           this.setState({ 
+             progressColor: 'blue',
+             imgemoji : images.thinking_face_123,
+            });
          }
          else if(this.state.count <= 5 && this.state.count >= 0){
-           this.setState({ progressColor: 'red' });
+           this.setState({ 
+             progressColor: 'red',
+             imgemoji : images.sad,
+            });
          }
          else {
-           this.setState({ progressColor: 'green' });
+           this.setState({ 
+             progressColor: 'green',
+             imgemoji :images.thinking_face,
+            });
          }
        }
        else {
@@ -587,6 +657,31 @@ class ImgRandomQuiz extends Component {
       correctoption : arrnew[qno].correctoption,
     });
 
+    var urlquestion = this.state.question;
+    var urlque =  this.state.question.split('//');
+    var split = urlque[0];
+    var split1 =urlque[1];
+    this.setState({
+      splitque:split
+    });
+
+    var temp = this.state.options.map((obj) => {
+      // console.log("obj  next question:  ",obj.option);
+
+      var urlopt = obj.option.split('//');
+      // console.log(" next:::: componentWillMount urlopt::::::999",urlopt);
+      var split = urlopt[0];
+      var split1 =urlopt[1];
+      var margeurl = `${split}//${split1}`
+
+      // console.log("next split::: componentwillmount:::::::::::: split::",split);
+      this.setState({
+        splitopt:split,
+        splitimg:split1,
+
+      });
+      // console.log("next::: splitopt componentWillMount  stste::::::::",this.state.splitopt);
+    })
   }
 
   setTimer = () => {
@@ -600,13 +695,22 @@ class ImgRandomQuiz extends Component {
 
         if(this.state.count < 15 && this.state.count > 5)
         {
-          this.setState({ progressColor: 'blue' });
+          this.setState({ 
+            progressColor: 'blue',
+            imgemoji : images.thinking_face_123,  
+          });
         }
         else if(this.state.count <= 5 && this.state.count >= 0){
-          this.setState({ progressColor: 'red' });
+          this.setState({ 
+            progressColor: 'red',
+            imgemoji : images.sad,  
+          });
         }
         else {
-          this.setState({ progressColor: 'green' });
+          this.setState({ 
+            progressColor: 'green',
+            imgemoji :images.thinking_face,  
+          });
         }
       }
       else {
@@ -783,10 +887,15 @@ class ImgRandomQuiz extends Component {
                 </View>
 
                 <View style={styles.progressbarView}>
-                  <CircularProgress percentage={this.state.percentage} progressWidth={22.5} size={53} donutColor={this.state.progressColor} fillColor='#FCFAFA' blankColor='#ECECEC'>
-                  <Text style={{fontSize: 17, fontFamily: 'lato-bold'}}>{this.state.count}</Text>
-                  </CircularProgress>
-                </View>
+                    <CircularProgress percentage={this.state.percentage} progressWidth={22.5} size={53} donutColor={this.state.progressColor} fillColor='#FCFAFA'  blankColor='#ECECEC'>
+
+                    <Image source={this.state.imgemoji} style={{width: 25, height: 25, opacity: .9,marginBottom:5}}/>
+
+                    <View style={{width: 30,height: 30,borderRadius: 100/2, backgroundColor: '#8270BA',alignItems:'center',justifyContent:'center',marginBottom:30}}>
+                    <Text style={{fontSize: 15, fontFamily: 'lato-bold',color:'white'}}>{this.state.count}</Text>
+                    </View>
+                    </CircularProgress>
+                    </View>
 
                 <View style={styles.mainViewCoin}>
                   <View style={styles.subViewCoin}>
@@ -837,7 +946,13 @@ class ImgRandomQuiz extends Component {
                 <View style={styles.mainViewQuestion}>
                   <View style={styles.subViewQuestion}>
                     <Text style={styles.question6Text}>Question {no + 1}</Text>
-                    <Text style={styles.questionText}>{this.state.question}</Text>
+                    {/* <Text style={styles.questionText}>{this.state.question}</Text> */}
+
+                    { this.state.splitque !== "http:"
+                      ?<Text style={styles.questionText}>{this.state.question}</Text>
+                     :<Image source={{ uri: this.state.question }} style={{width: 50, height: 50}}/>
+                    }
+
                   </View>
                 </View>
               </View>
