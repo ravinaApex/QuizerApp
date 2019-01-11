@@ -933,7 +933,7 @@ class ImgRandomQuiz extends Component {
                       </View>
                     </View>
                   </View>
-                  <View style={styles.mainViewBottomRadius}>
+                  <ScrollView style={styles.mainViewBottomRadius}>
                     <View style={styles.subbottomLeftRadiusView}>
                       <View style={styles.bottomLeftRadiusView}/>
                     </View>
@@ -941,7 +941,7 @@ class ImgRandomQuiz extends Component {
                       <View style={styles.bottomRightRadiusView}>
                       </View>
                     </View>
-                  </View>
+                  </ScrollView>
                 </View>
                 <View style={styles.mainViewQuestion}>
                   <View style={styles.subViewQuestion}>

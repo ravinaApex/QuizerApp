@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import { View, Text, Image, Dimensions, ScrollView, ImageBackground, TextInput, TouchableOpacity, AsyncStorage } from "react-native";
 import images from './../images';
 import styles from "./style";
@@ -13,7 +13,10 @@ const Height = Dimensions.get("window").height;
 const Width = Dimensions.get("window").width;
 import * as firebase from 'firebase';
 import { connect } from 'react-redux';
+import { FontAwesome } from '@expo/vector-icons';
+import { updateImg } from '../firebaseServices/services';
 import { bindActionCreators } from 'redux';
+import { ImagePicker } from 'expo';
 import * as currentUserAction from "../actions/currentUserAction";
 import moment from 'moment';
 var rankArray = [], weekDate = [], temp = [], coinArray, tempData = {};
@@ -22,18 +25,18 @@ const data = [10, 20, 18, 40, 38, 60, 70];
 const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const config = {
   interpolation: "spline",
-    line: { visible: false},
-    yAxis: { visible: false },
-    grid: { visible: false },
-    // yAxis: {
-    //   visible: true,
-    // },
-    xAxis: { visible: true },
-    area: {
-      gradientFrom: 'rgb(90, 195, 15)',
-      gradientFromOpacity: 1,
-      gradientTo: 'yellow',
-      gradientToOpacity: 0.4,
+  line: { visible: false },
+  yAxis: { visible: false },
+  grid: { visible: false },
+  // yAxis: {
+  //   visible: true,
+  // },
+  xAxis: { visible: true },
+  area: {
+    gradientFrom: 'rgb(90, 195, 15)',
+    gradientFromOpacity: 1,
+    gradientTo: 'yellow',
+    gradientToOpacity: 0.4,
   },
   insetX: 10,
   insetY: 10
@@ -53,25 +56,28 @@ class EditProfile extends Component {
       tab3: 'false',
       image: null,
       img: null,
+      isProfileImage: false,
     }
   }
 
-  pickImage = async () => {
-    console.log("innnnnnnnnnn");
+  _pickImage = async () => {
+
     let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: false,
+      allowsEditing: true,
       aspect: [4, 3],
     });
 
+    console.log(result);
     try {
       if (!result.cancelled) {
-        console.log("result innnnnnn iffffff");
+
         this.setState({ image: result.uri, isProfileImage: true });
         var arr = result.uri.split('/');
         var imgName = arr[arr.length - 1];
         uploadUrl = this.uploadImageAsync(result.uri, imgName);
-        console.log("uploadUrl::",uploadUrl);
+        console.log("uploadUrl::", uploadUrl);
         this.setState({ img: result.uri });
+        // console.log("this.state.image9999999999",this.state.img);
       }
     } catch (e) {
       console.log("elseeeeeeeeeeeee")
@@ -89,12 +95,22 @@ class EditProfile extends Component {
 
     const snapshot = await ref.put(blob);
     ref.getDownloadURL().then((url) => {
+      console.log("hhhhhhhhhhhh");
+      updateImg(url);
+      console.log("url::::::", url);
+
       this.setState({ image: url });
+      // updateImg(image);
     });
-    console.log("this.state.image",this.state.image);
+
     return snapshot;
   }
-    
+  updateImg = (image) => {
+    AsyncStorage.getItem("id_token").then((tokenValue) => {
+      firebase.database().ref(`/Users/${tokenValue}`).update({ uri: image })
+    });
+  }
+
 
   componentWillMount = () => {
 
@@ -125,19 +141,16 @@ class EditProfile extends Component {
     var rank, coin, arr;
     weekDate.map((date) => {
       this.props.historyData.map((obj) => {
-        if(date === obj.key){
+        if (date === obj.key) {
           test = true;
         }
       });
-      if(test === true)
-      {
+      if (test === true) {
         this.props.historyData.map((obj) => {
-          if(obj.key === date)
-          {
+          if (obj.key === date) {
             obj.data.map((inData) => {
-              if(inData.length !== 1)
-              {
-                arr = Object.keys(inData).map(function(k) { return inData[k] });
+              if (inData.length !== 1) {
+                arr = Object.keys(inData).map(function (k) { return inData[k] });
                 arr.map((obj) => {
                   rank = obj.ranking;
                 });
@@ -156,13 +169,12 @@ class EditProfile extends Component {
         rankArray.push(0);
       }
     });
-    console.log('rankArray: ',rankArray);
+    console.log('rankArray: ', rankArray);
 
     this.props.historyData.map((outData) => {
       outData.data.map((inData) => {
-        if(inData.length !== 1)
-        {
-          arr = Object.keys(inData).map(function(k) { return inData[k] });
+        if (inData.length !== 1) {
+          arr = Object.keys(inData).map(function (k) { return inData[k] });
           arr.map((obj) => {
             coin = obj.totalCoin;
           });
@@ -184,12 +196,9 @@ class EditProfile extends Component {
       });
     });
 
-
     coinArray = temp.sort((a, b) => (b.coin - a.coin));
-    console.log('coinArray: ',coinArray);
-
+    console.log('coinArray: ', coinArray);
   }
-
 
   tab1 = () => {
     this.setState({
@@ -216,29 +225,31 @@ class EditProfile extends Component {
   }
 
 
-  render(){
+  render() {
+    console.log("this.state.image render", this.state.image);
     let { image, img } = this.state;
+
     var arrData = coinArray.map((obj, i) => {
 
-      return(
+      return (
         <View key={i} style={styles.listView}>
           <View style={styles.listUnameView}>
-            <Text style={styles.listUname}>{i+1}</Text>
+            <Text style={styles.listUname}>{i + 1}</Text>
           </View>
           <View style={styles.dateView}>
             <Text style={styles.listUname}>{obj.date}</Text>
           </View>
           <View style={styles.listCoinView}>
-            <MaterialCommunityIcons name="coins" size={14} color='rgb(255, 164, 0)' style={{ marginTop: 3 }}/>
+            <MaterialCommunityIcons name="coins" size={14} color='rgb(255, 164, 0)' style={{ marginTop: 3 }} />
             <Text style={styles.listValueText}> {obj.coin}</Text>
           </View>
         </View>
       )
     });
 
-    return(
+    return (
       <View style={styles.container}>
-        <View style={styles.statusBar}/>
+        <View style={styles.statusBar} />
         <View style={styles.headerView}>
           <TouchableOpacity style={styles.headerIcon}>
             <MaterialIcons name="sort" size={25} />
@@ -247,95 +258,104 @@ class EditProfile extends Component {
             <Text style={styles.editProfileText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
-        <View style={{flex: 1}}>
-        <View style={{ flex: 0.9, }}>
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 0.9, }}>
 
+            {this.state.image === null
+              ? <View style={[styles.profileImgView]}>
+                <View style={{ flex: 1 }}>
+                  <Image source={{ uri: this.props.currentUserData.profile }} style={[styles.profileImg]} />
+                  <TouchableOpacity onPress={this._pickImage} style={{ height: 45, width: 45, borderRadius: 27, alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 25, right: 10, backgroundColor: 'rgb(23,119,95)' }}>
+                    <FontAwesome name="camera" size={20} color="white" />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
+              : <View style={styles.profileImgView}>
+                <View style={{ flex: 1 }}>
+                  <Image source={{ uri: image }} style={styles.profileImg} />
+                  <TouchableOpacity onPress={this._pickImage} style={{ height: 45, width: 45, borderRadius: 27, alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 25, right: 10, backgroundColor: 'rgb(23,119,95)' }}>
+                    <FontAwesome name="camera" size={20} color="white" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            }
 
-        <View style={styles.profileImgView}>
-         <Image source={{ uri: this.props.currentUserData.profile }} style={styles.profileImg} />
-         <TouchableOpacity onPress={this.pickImage} style={{height: 45,width: 45, borderRadius: 27,position: 'absolute',elevation: 20,bottom:10}}> 
-         <Image source={{uri: image}} style={{height: 55,width: 55,borderRadius: 27,  position: 'absolute',}} />
-        </TouchableOpacity>
-      </View>
-
-
-
-          <View style={styles.uNameView}>
-            <Text style={styles.uNameText}>{this.props.currentUserData.uname}</Text>
-            <Text style={styles.uNameEmail}>@samantha_smith</Text>
+            <View style={styles.uNameView}>
+              <Text style={styles.uNameText}>{this.props.currentUserData.uname}</Text>
+              <Text style={styles.uNameEmail}>@samantha_smith</Text>
+            </View>
           </View>
-        </View>
-        <View style={{ flex: 1.1, }}>
-          <View style={styles.tabView}>
+          <View style={{ flex: 1.1, }}>
+            <View style={styles.tabView}>
 
-          {this.state.tab1 == 'true'
-            ? <TouchableOpacity onPress={this.tab1} style={styles.opacity1View}>
-                <LinearGradient
-                   colors={['rgb(255, 255, 255)', 'rgb(255, 255, 255)', ]}
-                   style={styles.gradient1}>
-                   <Text style={styles.quiz1Text}>Quiz</Text>
-                   <Text style={styles.quiz1Number}>287</Text>
-                 </LinearGradient>
-               </TouchableOpacity>
-            : <TouchableOpacity onPress={this.tab1} style={styles.opacity2View}>
-               <LinearGradient
-                  colors={['transparent', 'rgba(0,0,0,0.03)', ]}
-                  style={styles.gradient2}>
-                  <Text style={styles.quiz2Text}>Quiz</Text>
-                  <Text style={styles.quiz2Number}>287</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-          }
+              {this.state.tab1 == 'true'
+                ? <TouchableOpacity onPress={this.tab1} style={styles.opacity1View}>
+                  <LinearGradient
+                    colors={['rgb(255, 255, 255)', 'rgb(255, 255, 255)',]}
+                    style={styles.gradient1}>
+                    <Text style={styles.quiz1Text}>Quiz</Text>
+                    <Text style={styles.quiz1Number}>287</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                : <TouchableOpacity onPress={this.tab1} style={styles.opacity2View}>
+                  <LinearGradient
+                    colors={['transparent', 'rgba(0,0,0,0.03)',]}
+                    style={styles.gradient2}>
+                    <Text style={styles.quiz2Text}>Quiz</Text>
+                    <Text style={styles.quiz2Number}>287</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              }
 
-          {this.state.tab2 == 'true'
-            ? <TouchableOpacity onPress={this.tab2} style={styles.opacity1View}>
-                <LinearGradient
-                   colors={['rgb(255, 255, 255)', 'rgb(255, 255, 255)', ]}
-                   style={styles.gradient1}>
-                   <Text style={styles.quiz1Text}>Ranking</Text>
-                   <Text style={styles.quiz1Number}>#{this.props.currentUserData.ranking}</Text>
-                 </LinearGradient>
-               </TouchableOpacity>
-            : <TouchableOpacity onPress={this.tab2} style={styles.opacity2View}>
-               <LinearGradient
-                  colors={['transparent', 'rgba(0,0,0,0.03)', ]}
-                  style={styles.gradient2}>
-                  <Text style={styles.quiz2Text}>Ranking</Text>
-                  <Text style={styles.quiz2Number}>#{this.props.currentUserData.ranking}</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-          }
+              {this.state.tab2 == 'true'
+                ? <TouchableOpacity onPress={this.tab2} style={styles.opacity1View}>
+                  <LinearGradient
+                    colors={['rgb(255, 255, 255)', 'rgb(255, 255, 255)',]}
+                    style={styles.gradient1}>
+                    <Text style={styles.quiz1Text}>Ranking</Text>
+                    <Text style={styles.quiz1Number}>#{this.props.currentUserData.ranking}</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                : <TouchableOpacity onPress={this.tab2} style={styles.opacity2View}>
+                  <LinearGradient
+                    colors={['transparent', 'rgba(0,0,0,0.03)',]}
+                    style={styles.gradient2}>
+                    <Text style={styles.quiz2Text}>Ranking</Text>
+                    <Text style={styles.quiz2Number}>#{this.props.currentUserData.ranking}</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              }
 
-          {this.state.tab3 == 'true'
-            ? <TouchableOpacity onPress={this.tab3} style={styles.opacity1View}>
-                <LinearGradient
-                   colors={['rgb(255, 255, 255)', 'rgb(255, 255, 255)', ]}
-                   style={styles.gradient1}>
-                   <Text style={styles.quiz1Text}>Coins</Text>
-                   <Text style={styles.quiz1Number}>{this.props.currentUserData.coin}</Text>
-                 </LinearGradient>
-               </TouchableOpacity>
-            : <TouchableOpacity onPress={this.tab3} style={styles.opacity2View}>
-               <LinearGradient
-                  colors={['transparent', 'rgba(0,0,0,0.03)', ]}
-                  style={styles.gradient2}>
-                  <Text style={styles.quiz2Text}>Coins</Text>
-                  <Text style={styles.quiz2Number}>{this.props.currentUserData.coin}</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-          }
-          </View>
+              {this.state.tab3 == 'true'
+                ? <TouchableOpacity onPress={this.tab3} style={styles.opacity1View}>
+                  <LinearGradient
+                    colors={['rgb(255, 255, 255)', 'rgb(255, 255, 255)',]}
+                    style={styles.gradient1}>
+                    <Text style={styles.quiz1Text}>Coins</Text>
+                    <Text style={styles.quiz1Number}>{this.props.currentUserData.coin}</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                : <TouchableOpacity onPress={this.tab3} style={styles.opacity2View}>
+                  <LinearGradient
+                    colors={['transparent', 'rgba(0,0,0,0.03)',]}
+                    style={styles.gradient2}>
+                    <Text style={styles.quiz2Text}>Coins</Text>
+                    <Text style={styles.quiz2Number}>{this.props.currentUserData.coin}</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              }
+            </View>
 
-          {this.state.tab1 === 'true'
-            ? <View style={styles.tab1View}>
+            {this.state.tab1 === 'true'
+              ? <View style={styles.tab1View}>
                 <Text style={styles.tab1Text}>Tab 1</Text>
               </View>
-            : null
-          }
+              : null
+            }
 
-          {this.state.tab2 === 'true'
-            ? <View style={styles.tab2View}>
+            {this.state.tab2 === 'true'
+              ? <View style={styles.tab2View}>
                 <View style={styles.changeWeekView}>
                   <Text style={styles.changeWeekText}>Change this week</Text>
                   <Ionicons name="md-arrow-dropup" size={20} color="rgb(232, 133, 0)" />
@@ -345,7 +365,7 @@ class EditProfile extends Component {
                   <Text style={styles.progressText}>Progress Graph</Text>
                 </View>
                 <View style={styles.chartView}>
-                  <LineChart style={{ flex:1 }} config={config} data={rankArray} xLabels={labels}/>
+                  <LineChart style={{ flex: 1 }} config={config} data={rankArray} xLabels={labels} />
                 </View>
               </View>
               : null
@@ -353,13 +373,13 @@ class EditProfile extends Component {
 
             {this.state.tab3 === 'true'
               ? <View style={styles.tab1View}>
-                  <ScrollView>
-                    {arrData}
-                  </ScrollView>
-                </View>
+                <ScrollView>
+                  {arrData}
+                </ScrollView>
+              </View>
               : null
             }
-            </View>
+          </View>
         </View>
       </View>
     )
