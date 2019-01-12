@@ -259,7 +259,7 @@ class EditProfile extends Component {
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
-          <View style={{ flex: 0.9, }}>
+          <View style={{ flex: 0.9, }}>  
 
             {this.state.image === null
               ? <View style={[styles.profileImgView]}>

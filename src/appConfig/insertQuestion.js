@@ -16,7 +16,7 @@ const jsonData = {
       {  "option" : "Helium Bat"},
       {  "option" : "Stumpy"},
      ]
-    },
+    },  
     "question2" : {
       "question" : "Which was the 1st non Test playing country to beat India in an international match?",
       "correctoption" : ["Sri Lanka"],

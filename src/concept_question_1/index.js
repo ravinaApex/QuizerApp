@@ -499,7 +499,7 @@ class ImgRandomQuiz extends Component {
              imgemoji :images.thinking_face,
             });
          }
-       }
+       }  
        else {
          this.setState({
            timeModal: true,

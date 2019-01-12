@@ -112,7 +112,7 @@ export default {
    alignItems:'flex-end'
   },
   viewRightRadius:{
-    borderRadius: 10,
+    borderRadius: 10,  
   },
   mainViewBottomRadius:{
     // backgroundColor:'red',
