@@ -121,7 +121,7 @@ export default {
   },
   subbottomLeftRadiusView:{
     flex: 1,
-     justifyContent:'flex-end'
+     justifyContent:'flex-end' 
   },
   bottomLeftRadiusView:{
     borderRadius: 10,

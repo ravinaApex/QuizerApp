@@ -266,7 +266,7 @@ class EditProfile extends Component {
                 <View style={{ flex: 1 }}>
                   <Image source={{ uri: this.props.currentUserData.profile }} style={[styles.profileImg]} />
                   <TouchableOpacity onPress={this._pickImage} style={{ height: 45, width: 45, borderRadius: 27, alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 25, right: 10, backgroundColor: 'rgb(23,119,95)' }}>
-                    <FontAwesome name="camera" size={20} color="white" />
+                    <FontAwesome name="camera" size={20} color="white" />  
                   </TouchableOpacity>
                 </View>
               </View>

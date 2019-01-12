@@ -23,7 +23,7 @@ const jsonData = {
       "options" : [
         {"option" : "Canada"},
         {"option" : "Sri Lanka"},
-        {"option" : "Zimbabwe"},
+        {"option" : "Zimbabwe"}, 
         {"option" : "East Africa"},
       ]
     },
