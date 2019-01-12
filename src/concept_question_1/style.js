@@ -44,13 +44,14 @@ export default {
    },
   mainQuestionView:{
     flex:1.5,
-    backgroundColor:'#FFFFFF',
+   backgroundColor:'#FFFFFF',
     borderRadius:15,
     borderStyle: 'dotted',
     borderColor: 'black',
     borderBottomWidth:1,
   },
   mainView:{
+
     flex: 1,
      flexDirection : 'row',
   },
@@ -114,6 +115,7 @@ export default {
     borderRadius: 10,
   },
   mainViewBottomRadius:{
+    // backgroundColor:'red',
     flexDirection:'row',
     flex: 1
   },
@@ -131,9 +133,11 @@ export default {
   },
   bottomRightRadiusView:{
     borderRadius: 10,
+
   },
   mainViewQuestion:{
      flex:1,
+
      paddingHorizontal: 33
   },
   subViewQuestion:{
@@ -143,6 +147,7 @@ export default {
   },
   question6Text:{
     fontSize: 12,
+
     color:'#A6A6A6',
     fontFamily:'lato-regular'
   },

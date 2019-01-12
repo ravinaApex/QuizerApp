@@ -48,10 +48,10 @@ export default {
   },
 
   profileImg: {
-    height: 140,
+    height: 140,  
     width: 140,
     borderRadius: 70,
-  },
+  },  
 
   uNameView: {
     flex: 3.5,

@@ -39,6 +39,13 @@ export const signIns = (email, password, success, fail) => {
     fail(error);
   });
 }
+export const updateImg = (image) =>{
+  console.log("image",image);
+  console.log("iiiiiiiiiiiiiiiiiiiii");
+  AsyncStorage.getItem("id_token").then((tokenValue) => {
+    firebase.database().ref(`/Users/${tokenValue}`).update({ profile: image })
+  });
+}
 
 export const updateCoin = (coin) => {
   AsyncStorage.getItem("id_token").then((tokenValue) => {

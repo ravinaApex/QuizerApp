@@ -477,7 +477,7 @@ class ImgRandomQuiz extends Component {
          if(this.state.count < 15 && this.state.count > 5)
          {
            this.setState({
-             progressColor: 'blue',
+             progressColor: 'blue',  
              imgemoji : images.thinking_face_123,
             });
          }
