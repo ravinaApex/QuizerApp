@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, AsyncStorage, Alert, TouchableWithoutFeedback } from "react-native";
+import { View, Text, Animated, Image, TouchableOpacity, TouchableHighlight, AsyncStorage, Alert, TouchableWithoutFeedback } from "react-native";
 import images from './../images';
 import styles from "./style";
 import colors from "../appConfig/colors";
@@ -13,7 +13,6 @@ import { bindActionCreators } from 'redux';
 import * as currentUserAction from "../actions/currentUserAction";
 import { createHistory } from '../firebaseServices/services';
 import moment from 'moment';
-import _ from 'lodash';
 
 var name, surname;
 
@@ -24,11 +23,20 @@ class Home extends Component {
     this.state = {
       name: '',
       surname: '',
+      sports: false,
+      physics: false,
+      movies: false,
+      politics: false,
+      history: false,
+      maths: false,
+      logo: false,
+      technology: false,
       profile: null,
       coin: 0,
       ranking: 0,
       category: '',
     }
+    this.springValue = new Animated.Value(1);
   }
 
 // let counter=1
@@ -38,9 +46,10 @@ class Home extends Component {
       if(this.state.category)
       {
         this.props.navigation.navigate('conceptQue1', { category: this.state.category, coin: this.props.currentUserData.coin, rank: this.props.currentUserData.ranking, quizTo: quizTo });
+        this.setState({ category: '' });
         AsyncStorage.getItem("id_token").then((tokenValue) => {
           firebase.database().ref(`/Users/${tokenValue}`).once('value', (data) => {
-            // createHistory(data.val().coin, data.val().ranking);
+            createHistory();
           });
         });
       }
@@ -74,7 +83,80 @@ class Home extends Component {
   handleViewRef = ref => this.view = ref;
 
   getCategory = (category) => {
-    this.view.pulse(2000);
+    this.springValue.setValue(0.5)
+    if (category === 'Sports') {
+      this.setState({
+        sports: true
+      }, () => {
+        setTimeout( () => {
+          this.setState({ sports: false })
+        },1000);
+      });
+    } else if (category === 'Physics') {
+      this.setState({
+        physics: true
+      }, () => {
+        setTimeout( () => {
+          this.setState({ physics: false })
+        },1000);
+      });
+    } else if (category === 'Movies') {
+      this.setState({
+        movies: true
+      }, () => {
+        setTimeout( () => {
+          this.setState({ movies: false })
+        },1000);
+      });
+    } else if (category === 'Politcs') {
+      this.setState({
+        politics: true
+      }, () => {
+        setTimeout( () => {
+          this.setState({ politics: false })
+        },1000);
+      });
+    } else if (category === 'History') {
+      this.setState({
+        history: true
+      }, () => {
+        setTimeout( () => {
+          this.setState({ history: false })
+        },1000);
+      });
+    } else if (category === 'Maths') {
+      this.setState({
+        maths: true
+      }, () => {
+        setTimeout( () => {
+          this.setState({ maths: false })
+        },1000);
+      });
+    } else if (category === 'Logo') {
+      this.setState({
+        logo: true
+      }, () => {
+        setTimeout( () => {
+          this.setState({ logo: false })
+        },1000);
+      });
+    } else if (category === 'Technology') {
+      this.setState({
+        technology: true
+      }, () => {
+        setTimeout( () => {
+          this.setState({ technology: false })
+        },1000);
+      });
+    }
+    Animated.spring(
+      this.springValue,
+      {
+        toValue: 1,
+        friction: 1
+      }
+    ).start();
+
     this.setState({ category: category });
   }
 
@@ -148,76 +230,76 @@ class Home extends Component {
               </View>
             </Animatable.View>
           </View>
-          <View style={[styles.tab2, { marginHorizontal: 10 }]}>
+          <View style={[styles.tab2, { marginHorizontal: 10, }]}>
             <View style={styles.quizCateView}><Text style={styles.quizCateText}>Q U I Z   C A T E G O R I E S</Text></View>
             <View style={styles.imagePart1}>
-              <TouchableWithoutFeedback onPress={() => this.getCategory("Sports")}>
-                <Animatable.View animation="bounceIn" duration={2000} direction="normal" style={{ margin: 7 }}>
-                  <View style={styles.imageView1}>
-                    <Image source={images.sports} style={styles.imageDisplay} />
-                    <Text style={styles.imageText}>Sports</Text>
-                  </View>
-                </Animatable.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.getCategory("Physics")}>
-                <Animatable.View ref={this.handleViewRef} animation="flash" duration={2000} direction="normal" style={{ margin: 7 }}>
-                  <View style={styles.imageView1}>
-                    <Image source={images.physics} style={styles.imageDisplay} />
-                    <Text style={styles.imageText}>Physics</Text>
-                  </View>
-                </Animatable.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.getCategory("Movies")}>
-                <Animatable.View animation="jello" duration={2000} direction="normal" style={{ margin: 7 }}>
-                  <View style={styles.imageView1}>
-                    <Image source={images.movies} style={styles.imageDisplay} />
-                    <Text style={styles.imageText}>Movies</Text>
-                  </View>
-                </Animatable.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.getCategory("Politcs")}>
-                <Animatable.View ref={this.handleViewRef} animation="pulse" duration={2000} direction="normal" style={{ margin: 7 }}>
-                  <View style={styles.imageView1}>
-                    <Image source={images.politics} style={styles.imageDisplay} />
-                    <Text style={styles.imageText}>Politcs</Text>
-                  </View>
-                </Animatable.View>
-              </TouchableWithoutFeedback>
+              <TouchableOpacity style={styles.imageView1} onPress={() => this.getCategory("Sports")}>
+                {
+                  this.state.sports
+                  ? <Animated.Image source={images.sports} style={[styles.imageDisplay, {transform: [{scale: this.springValue}]}]} />
+                  : <Image source={images.sports} style={styles.imageDisplay} />
+                }
+                <Text style={styles.imageText}>Sports</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.imageView1} onPress={() => this.getCategory("Physics")}>
+                {
+                  this.state.physics
+                  ? <Animated.Image source={images.physics} style={[styles.imageDisplay, {transform: [{scale: this.springValue}]}]} />
+                  : <Image source={images.physics} style={styles.imageDisplay} />
+                }
+                <Text style={styles.imageText}>Physics</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.imageView1} onPress={() => this.getCategory("Movies")}>
+                {
+                  this.state.movies
+                  ? <Animated.Image source={images.movies} style={[styles.imageDisplay, {transform: [{scale: this.springValue}]}]} />
+                  : <Image source={images.movies} style={styles.imageDisplay} />
+                }
+                <Text style={styles.imageText}>Movies</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.imageView1} onPress={() => this.getCategory("Politcs")}>
+                {
+                  this.state.politics
+                  ? <Animated.Image source={images.politics} style={[styles.imageDisplay, {transform: [{scale: this.springValue}]}]} />
+                  : <Image source={images.politics} style={styles.imageDisplay} />
+                }
+                <Text style={styles.imageText}>Politcs</Text>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.imagePart1}>
-              <TouchableWithoutFeedback onPress={() => this.getCategory("History")}>
-                <Animatable.View animation="wobble" duration={2000} direction="normal" style={{ margin: 7 }}>
-                  <View style={styles.imageView1}>
-                    <Image source={images.history} style={styles.imageDisplay} />
-                    <Text style={styles.imageText}>History</Text>
-                  </View>
-                </Animatable.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.getCategory("Maths")}>
-                <Animatable.View animation="rubberBand" duration={2000} direction="normal" style={{ margin: 7 }}>
-                  <View style={styles.imageView1}>
-                    <Image source={images.maths} style={styles.imageDisplay} />
-                    <Text style={styles.imageText}>Maths</Text>
-                  </View>
-                </Animatable.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.getCategory("Logo")}>
-                <Animatable.View animation="shake" duration={2000} direction="normal" style={{ margin: 7 }}>
-                  <View style={styles.imageView1}>
-                    <Image source={images.logo} style={styles.imageDisplay} />
-                    <Text style={styles.imageText}>Logo</Text>
-                  </View>
-                </Animatable.View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={() => this.getCategory("Technology")}>
-                <Animatable.View animation="swing" duration={2000} direction="normal" style={{ margin: 6 }}>
-                  <View style={styles.imageView1}>
-                    <Image source={images.technology} style={styles.imageDisplay} />
-                    <Text style={styles.imageText}>Technology</Text>
-                  </View>
-                </Animatable.View>
-              </TouchableWithoutFeedback>
+              <TouchableOpacity style={styles.imageView1} onPress={() => this.getCategory("History")}>
+                {
+                  this.state.history
+                  ? <Animated.Image source={images.history} style={[styles.imageDisplay, {transform: [{scale: this.springValue}]}]} />
+                  : <Image source={images.history} style={styles.imageDisplay} />
+                }
+                <Text style={styles.imageText}>History</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.imageView1} onPress={() => this.getCategory("Maths")}>
+                {
+                  this.state.maths
+                  ? <Animated.Image source={images.maths} style={[styles.imageDisplay, {transform: [{scale: this.springValue}]}]} />
+                  : <Image source={images.maths} style={styles.imageDisplay} />
+                }
+                <Text style={styles.imageText}>Maths</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.imageView1} onPress={() => this.getCategory("Logo")}>
+                {
+                  this.state.logo
+                  ? <Animated.Image source={images.logo} style={[styles.imageDisplay, {transform: [{scale: this.springValue}]}]} />
+                  : <Image source={images.logo} style={styles.imageDisplay} />
+                }
+                <Text style={styles.imageText}>Logo</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.imageView1} onPress={() => this.getCategory("Technology")}>
+                {
+                  this.state.technology
+                  ? <Animated.Image source={images.technology} style={[styles.imageDisplay, {transform: [{scale: this.springValue}]}]} />
+                  : <Image source={images.technology} style={styles.imageDisplay} />
+                }
+                <Text style={styles.imageText}>Technology</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={{ flex: 1.2, }}>

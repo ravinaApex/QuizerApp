@@ -20,4 +20,7 @@ export default {
   crossMark: require('./../assets/cross.png'),
   coin: require('./../assets/coin.png'),
   timeout: require('./../assets/timeout.gif'),
+  sad: require('./../assets/sad.jpeg'),
+  thinking_face_123: require('./../assets/thinking_face_123.png'),
+  thinking_face: require('./../assets/thinking_face.png'),
 }

@@ -46,7 +46,7 @@ export default {
     flex:1.5,
     backgroundColor:'#FFFFFF',
     borderRadius:15,
-   borderStyle: 'dotted',
+    borderStyle: 'dotted',
     borderColor: 'black',
     borderBottomWidth:1,
   },
@@ -147,19 +147,17 @@ export default {
     fontFamily:'lato-regular'
   },
   questionText:{
-     fontSize: 16,
-     marginTop: 35,
-      fontFamily:'lato-bold'
+    fontSize: 16,
+    fontFamily:'lato-bold'
   },
   mainViewList:{
     flex:1.5,
-   backgroundColor:'#FCFAFA',
+    backgroundColor:'#FCFAFA',
     paddingHorizontal: 20,
   },
   firstOptionView:{
     height: Height/8,
     alignItems:'center',
-    // justifyContent:'center',
     marginBottom:2,
     backgroundColor:'#FFFFFF'
   },

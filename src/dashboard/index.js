@@ -55,7 +55,7 @@ class Dashboard extends Component {
   }
 
   render(){
-
+    var curentUser = 'white';
     arrList = this.props.rankedUserDataList;
     rankData = Object.keys(arrList).map(key => {
        return { ...arrList[key], id: key };
@@ -63,9 +63,15 @@ class Dashboard extends Component {
 
 
     var arrData = rankData.map((obj, i) => {
-
+      if(this.props.currentUserData.uname === obj.uname)
+      {
+        curentUser = 'rgb(230, 230, 230)';
+      }
+      else {
+        curentUser = 'white';
+      }
       return(
-        <View key={i} style={styles.listView}>
+        <View key={i} style={[styles.listView, {justifyContent: 'center', alignItems: 'center', backgroundColor: curentUser}]}>
           <View style={{ width: 50, }}>
             <Image source={{ uri: obj.profile}} style={styles.listImage}/>
           </View>
@@ -163,15 +169,11 @@ class Dashboard extends Component {
                   )
                 })
               }
-
-
             </View>
           </View>
           <View style={styles.listTab}>
             <ScrollView>
-              <View style={{ marginTop: 25 }}>
                 {arrData}
-              </View>
             </ScrollView>
             <View style={styles.staticView}>
               <View style={styles.staticProfileView}>

@@ -94,7 +94,7 @@ class EditProfile extends Component {
     console.log("this.state.image",this.state.image);
     return snapshot;
   }
-    
+
 
   componentWillMount = () => {
 
@@ -185,7 +185,10 @@ class EditProfile extends Component {
     });
 
 
-    coinArray = temp.sort((a, b) => (b.coin - a.coin));
+    // coinArray = temp.sort((a, b) => (b.coin - a.coin));
+
+    coinArray = temp.reverse();
+
     console.log('coinArray: ',coinArray);
 
   }
@@ -254,7 +257,7 @@ class EditProfile extends Component {
 
         <View style={styles.profileImgView}>
          <Image source={{ uri: this.props.currentUserData.profile }} style={styles.profileImg} />
-         <TouchableOpacity onPress={this.pickImage} style={{height: 45,width: 45, borderRadius: 27,position: 'absolute',elevation: 20,bottom:10}}> 
+         <TouchableOpacity onPress={this.pickImage} style={{height: 45,width: 45, borderRadius: 27,position: 'absolute',elevation: 20,bottom:10}}>
          <Image source={{uri: image}} style={{height: 55,width: 55,borderRadius: 27,  position: 'absolute',}} />
         </TouchableOpacity>
       </View>
@@ -345,7 +348,7 @@ class EditProfile extends Component {
                   <Text style={styles.progressText}>Progress Graph</Text>
                 </View>
                 <View style={styles.chartView}>
-                  <LineChart style={{ flex:1 }} config={config} data={rankArray} xLabels={labels}/>
+                  <LineChart style={{ flex:1 }} config={config} data={data} xLabels={labels}/>
                 </View>
               </View>
               : null

@@ -36,20 +36,14 @@ class Option extends Component {
   }
 
   componentWillMount = async () => {
-    // console.log("will");
 
     var { values, index } = this.props;
-    console.log("render values    test demo::",values.option);
     var urlopt = values.option.split('//');
-    console.log("urlopt",urlopt);
     var split = urlopt[0];
-    var split1 =urlopt[1];
-    // console.log("componentwillmount:::::::::::: split::",split);
+    var split1 = urlopt[1];
     this.setState({
       splitopt:split,
     });
-    console.log("setState splitopt will ::::",this.state.splitopt);
-
 
     this.setState({
       correctoption: arrnew[qno].correctoption,
@@ -174,7 +168,7 @@ class Option extends Component {
         <View style={[styles.firstOptionView, this.state.borderStyle,  { flexDirection: 'row', backgroundColor: this.state.color}]}>
           <View style={{ flex: 9, alignItems: 'center', }}>
             {/* <Text style={[styles.firstOptionText, {marginLeft: deviceWidth / 10,}]}>{values.option}</Text> */}
-            
+
             {
               split !== "http:" && split !== "https:"
                ? <Text style={styles.firstOptionText}>{values.option}</Text>
@@ -482,19 +476,19 @@ class ImgRandomQuiz extends Component {
          })
          if(this.state.count < 15 && this.state.count > 5)
          {
-           this.setState({ 
+           this.setState({
              progressColor: 'blue',
              imgemoji : images.thinking_face_123,
             });
          }
          else if(this.state.count <= 5 && this.state.count >= 0){
-           this.setState({ 
+           this.setState({
              progressColor: 'red',
              imgemoji : images.sad,
             });
          }
          else {
-           this.setState({ 
+           this.setState({
              progressColor: 'green',
              imgemoji :images.thinking_face,
             });
@@ -695,21 +689,21 @@ class ImgRandomQuiz extends Component {
 
         if(this.state.count < 15 && this.state.count > 5)
         {
-          this.setState({ 
+          this.setState({
             progressColor: 'blue',
-            imgemoji : images.thinking_face_123,  
+            imgemoji : images.thinking_face_123,
           });
         }
         else if(this.state.count <= 5 && this.state.count >= 0){
-          this.setState({ 
+          this.setState({
             progressColor: 'red',
-            imgemoji : images.sad,  
+            imgemoji : images.sad,
           });
         }
         else {
-          this.setState({ 
+          this.setState({
             progressColor: 'green',
-            imgemoji :images.thinking_face,  
+            imgemoji :images.thinking_face,
           });
         }
       }
@@ -887,15 +881,13 @@ class ImgRandomQuiz extends Component {
                 </View>
 
                 <View style={styles.progressbarView}>
-                    <CircularProgress percentage={this.state.percentage} progressWidth={22.5} size={53} donutColor={this.state.progressColor} fillColor='#FCFAFA'  blankColor='#ECECEC'>
-
+                  <CircularProgress percentage={this.state.percentage} progressWidth={22.5} size={53} donutColor={this.state.progressColor} fillColor='#FCFAFA'  blankColor='#ECECEC'>
                     <Image source={this.state.imgemoji} style={{width: 25, height: 25, opacity: .9,marginBottom:5}}/>
-
                     <View style={{width: 30,height: 30,borderRadius: 100/2, backgroundColor: '#8270BA',alignItems:'center',justifyContent:'center',marginBottom:30}}>
-                    <Text style={{fontSize: 15, fontFamily: 'lato-bold',color:'white'}}>{this.state.count}</Text>
+                      <Text style={{fontSize: 15, fontFamily: 'lato-bold',color:'white'}}>{this.state.count}</Text>
                     </View>
-                    </CircularProgress>
-                    </View>
+                  </CircularProgress>
+                </View>
 
                 <View style={styles.mainViewCoin}>
                   <View style={styles.subViewCoin}>
@@ -908,13 +900,6 @@ class ImgRandomQuiz extends Component {
                   </View>
                 </View>
               </View>
-              {/*<Button
-                onPress={this.onPressLearnMore}
-                title="Go to"
-                color="#841584"
-                width={100}
-              />*/}
-
               { this.state.correctoption.length > 1
                 ? <View style={{height:70, alignItems: 'center', justifyContent: 'center'}}>
                     <Animated.Text style={{ fontSize: textSize, color: 'green', fontWeight: 'bold'}}>Choose {this.state.correctoption.length} Option for this Question</Animated.Text>
@@ -922,44 +907,23 @@ class ImgRandomQuiz extends Component {
                 : null
               }
 
-              <View style={styles.mainQuestionView}>
-                <View style={{ height:115, width: deviceWidth - 40}}>
-                  <View style={styles.mainViewRadius}>
-                    <View style={{flex: 1}}>
-                      <View style={styles.leftTopRadius}/>
-                    </View>
-                    <View style={styles.mainViewRightRadius}>
-                      <View style={styles.viewRightRadius}>
-                      </View>
-                    </View>
-                  </View>
-                  <View style={styles.mainViewBottomRadius}>
-                    <View style={styles.subbottomLeftRadiusView}>
-                      <View style={styles.bottomLeftRadiusView}/>
-                    </View>
-                    <View style={styles.subbottomRightRadiusView}>
-                      <View style={styles.bottomRightRadiusView}>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.mainViewQuestion}>
-                  <View style={styles.subViewQuestion}>
+              <View style={[styles.mainQuestionView, {elevation: 10}]}>
+                <View style={[styles.mainViewQuestion, ]}>
+                  <View style={{ flex: 3, justifyContent: 'center' }}>
                     <Text style={styles.question6Text}>Question {no + 1}</Text>
-                    {/* <Text style={styles.questionText}>{this.state.question}</Text> */}
-
-                    { this.state.splitque !== "http:"
-                      ?<Text style={styles.questionText}>{this.state.question}</Text>
-                     :<Image source={{ uri: this.state.question }} style={{width: 50, height: 50}}/>
-                    }
-
+                  </View>
+                  <View style={{ flex: 7, justifyContent: 'center' }}>
+                  { this.state.splitque !== "http:"
+                    ? <Text style={styles.questionText}>{this.state.question}</Text>
+                    : <Image source={{ uri: this.state.question }} style={{width: 50, height: 50}}/>
+                  }
                   </View>
                 </View>
               </View>
             </View>
 
-            <View style={styles.mainViewList}>
-
+            <View style={[styles.mainViewList,]}>
+              <View style={{ marginBottom: 22, backgroundColor: 'rgb(252, 250, 250)', paddingHorizontal:2, elevation: 10 }}>
               {this.state.correctoption.length > 1
                 ? <FlatList
                     data={this.state.options}
@@ -974,7 +938,7 @@ class ImgRandomQuiz extends Component {
                     }
                   />
               }
-
+              </View>
               <Modal
                 animationType="fade"
                 transparent={true}
@@ -1030,40 +994,6 @@ class ImgRandomQuiz extends Component {
                   </View>
                 </View>
               </Modal>
-
-              {/*<Modal
-              animationType="fade"
-              transparent={true}
-              visible={this.state.modalVisible}>
-                <View style={{ flex:1, justifyContent: 'center', }}>
-                {this.state.userAnswer
-                  ? <View style={{height: 200, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgb(250, 250, 250)',  }}>
-                      <Image source={images.checkMark} style={{width: 100, height: 100}}/>
-                      <Text style={{ color: this.state.customColor, fontFamily: 'bubble-regular', fontSize: 22, marginTop: 20 }}>coin is: {this.state.coin}</Text>
-                    </View>
-                  : this.state.timeModal
-                    ? <View style={{height: 200, alignItems: 'center', backgroundColor: 'rgb(250, 250, 250)', justifyContent: 'center', }}>
-                        <View style={{ alignItems: 'center' }}>
-                          <MaterialIcons name="access-time" size={70} />
-                          <Text style={{ fontFamily: 'bubble-regular', fontSize: 28, marginTop: 10 }}>time out</Text>
-                          <TouchableOpacity style={{ height: 40, width: 80, marginTop: 15, borderRadius: 10, backgroundColor: this.state.customColor, justifyContent: 'center', alignItems: 'center' }} onPress={() => this.closeTimeModal()}>
-                            <Text style={{ fontSize: 25, fontFamily: 'bubble-regular', color: 'white' }}>Next</Text>
-                          </TouchableOpacity>
-                        </View>
-                    </View>
-                  : <View style={{height: 200, alignItems: 'center', backgroundColor: 'rgb(250, 250, 250)', justifyContent: 'center' }}>
-                      <View style={{ alignItems: 'center' }}>
-                        <Image source={images.crossMark} style={{width: 100, height: 100}}/>
-                        <Text style={{ color: this.state.customColor, fontFamily: 'bubble-regular', fontSize: 22, marginTop: 10 }}>Correct Answer is:</Text>
-
-                        { this.state.correctoption.map((item, key)=>(
-                           <Text key={key} style={{ color: this.state.customColor, fontFamily: 'bubble-regular', fontSize: 22 }}> { item } </Text>)
-                        )}
-                      </View>
-                    </View>
-              }
-              </View>
-            </Modal>*/}
           </View>
         </View>
       </View>

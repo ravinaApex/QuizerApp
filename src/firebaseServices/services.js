@@ -80,7 +80,7 @@ export const updateCoin = (coin) => {
   });
 }
 
-export const createHistory = (coin, ranking) => {
+export const createHistory = () => {
 
   AsyncStorage.getItem("id_token").then((tokenValue) => {
     firebase.database().ref(`/Users/${tokenValue}`).update({ quizTime: moment(new Date()).format('DD-MM-YYYY HH:mm:ss') });
@@ -104,14 +104,12 @@ export const updateHistory = (coin, ranking, earnedCoin, quizTo) => {
       ]
     }
     firebase.database().ref(`/UserHistory/${tokenValue}`).on('child_added', (snapshot) => {
-      console.log("snapshot.key: ",snapshot.key);
       keyDate = snapshot.key;
       keyDate === currentDate ? dateExist = true : dateExist = false;
     });
     console.log('out');
     if(dateExist === true)
     {
-      console.log('test');
       firebase.database().ref(`/UserHistory/${tokenValue}/${currentDate}`).push({
         'earnedCoin': earnedCoin,
         'quizFrom': moment(new Date()).format('HH:mm:ss'),
@@ -121,7 +119,6 @@ export const updateHistory = (coin, ranking, earnedCoin, quizTo) => {
       })
     }
     else {
-      console.log('hhh');
       firebase.database().ref(`UserHistory/${tokenValue}`).update(historyData);
     }
   });
