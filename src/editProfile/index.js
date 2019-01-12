@@ -75,12 +75,9 @@ class EditProfile extends Component {
         var arr = result.uri.split('/');
         var imgName = arr[arr.length - 1];
         uploadUrl = this.uploadImageAsync(result.uri, imgName);
-        console.log("uploadUrl::", uploadUrl);
         this.setState({ img: result.uri });
-        // console.log("this.state.image9999999999",this.state.img);
       }
     } catch (e) {
-      console.log("elseeeeeeeeeeeee")
       console.log(e);
       alert('Upload failed, sorry :(');
     }
@@ -88,17 +85,13 @@ class EditProfile extends Component {
 
 
   uploadImageAsync = async (uri, imgName) => {
-    console.log("function");
     const response = await fetch(uri);
     const blob = await response.blob();
     const ref = firebase.storage().ref().child("images/" + imgName);
 
     const snapshot = await ref.put(blob);
     ref.getDownloadURL().then((url) => {
-      console.log("hhhhhhhhhhhh");
       updateImg(url);
-      console.log("url::::::", url);
-
       this.setState({ image: url });
       // updateImg(image);
     });
@@ -361,6 +354,7 @@ class EditProfile extends Component {
                   <Text style={styles.progressText}>Progress Graph</Text>
                 </View>
                 <View style={styles.chartView}>
+                  <LineChart style={{ flex: 1 }} config={config} data={rankArray} xLabels={labels} />
                 </View>
               </View>
               : null

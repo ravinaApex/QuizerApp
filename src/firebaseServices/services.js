@@ -94,6 +94,12 @@ export const createHistory = () => {
   });
 }
 
+export const updateImg = (image) =>{
+ AsyncStorage.getItem("id_token").then((tokenValue) => {
+   firebase.database().ref(`/Users/${tokenValue}`).update({ profile: image })
+ });
+}
+
 export const updateHistory = (coin, ranking, earnedCoin, quizTo) => {
 
   AsyncStorage.getItem("id_token").then((tokenValue) => {
